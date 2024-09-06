@@ -1,120 +1,148 @@
 import { useEffect, useState } from "react";
 import { RiAddCircleFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
 import { ImArrowLeft2 } from "react-icons/im";
 import { ImArrowRight2 } from "react-icons/im";
-import ImgLogo from "../assets/Cinematic_Kino_happy_lovers_couple_taking_a_photo_in_cinema_pa_0.jpg";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../services/ConfigFirebase";
+import { Link } from "react-router-dom";
+
+interface ImagemProps {
+  uid: string;
+  previewUrl: string;
+  url: string;
+}
+
+interface PostProps {
+  id: string;
+  titulo: string;
+  data: Date;
+  descricao: string;
+  imagens: ImagemProps[];
+}
 
 function Home() {
-  const [dataFormatada, setDataFormatada] = useState("");
-  const [atualizaData, setAtualizaData] = useState(new Date());
-  const [imagens, setImagens] = useState(false);
+  const [dataAtual, setDataAtual] = useState(new Date());
+  const [post, setPost] = useState<PostProps[]>([]);
+  const [postFiltrado, setPostFiltrado] = useState<PostProps[]>([]);
 
   useEffect(() => {
-    atualizarData(atualizaData);
-    setImagens(false);
-  }, [atualizaData]);
+    getDataAtual();
+  }, []);
 
-  function atualizarData(data: Date) {
-    const dataDia = `${
-      data.getDate() < 10 ? `0${data.getDate()}` : data.getDate()
-    }`;
-    const dataMes = `${
-      data.getMonth() < 9 ? `0${data.getMonth() + 1}` : data.getMonth() + 1
-    }`;
-    const dataAno = data.getFullYear();
+  useEffect(() => {
+    getPosts();
+    postsFiltrados();
+  }, [dataAtual]);
 
-    const dataFormada = `${dataDia}/${dataMes}/${dataAno}`;
-    setDataFormatada(dataFormada);
+  async function getPosts() {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    const listaPost: PostProps[] = [];
+    querySnapshot.forEach((doc) => {
+      listaPost.push({
+        id: doc.id,
+        titulo: doc.data().titulo,
+        data: new Date(doc.data().data),
+        descricao: doc.data().descricao,
+        imagens: doc.data().imagens,
+      });
+    });
+    setPost(listaPost);
   }
 
-  const aumentarData = () => {
-    setAtualizaData((prevData) => {
-      const novaData = new Date(prevData); // Cria uma nova instância de Date
-      novaData.setDate(novaData.getDate() + 1); // Aumenta um dia
-      return novaData;
-    });
-  };
+  function getDataAtual() {
+    const data = new Date();
 
-  const diminuirData = () => {
-    setAtualizaData((prevData) => {
-      const novaData = new Date(prevData); // Cria uma nova instância de Date
-      novaData.setDate(novaData.getDate() - 1); // Diminui um dia
+    setDataAtual(data);
+  }
+
+  function adicionarDia() {
+    setDataAtual((prevData) => {
+      const novaData = new Date(prevData);
+      novaData.setDate(novaData.getDate() + 1);
       return novaData;
     });
-  };
+  }
+
+  function diminuirDia() {
+    setDataAtual((prevData) => {
+      const novaData = new Date(prevData);
+      novaData.setDate(novaData.getDate() - 1);
+      return novaData;
+    });
+  }
+
+  function postsFiltrados() {
+    const dataAtualString = dataAtual.toISOString().split("T")[0]; // Formato "YYYY-MM-DD"
+    const filtro = post.filter(
+      (p) => p.data.toISOString().split("T")[0] === dataAtualString // Compara como strings
+    );
+    setPostFiltrado(filtro);
+  }
 
   return (
     <>
-      <main className="flex flex-col items-center py-10 h-4/5">
-        <h2 className="font-bold text-xl my-2">{dataFormatada}</h2>
-
-        <section className="w-full h-5/6 bg-bgMain  grid grid-cols-2 divide-x-2 divide-gray-500 relative">
-          {imagens == true ? (
-            <>
-              <div className="flex justify-center items-center">
-                <img
-                  src={ImgLogo}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex justify-center items-center">
-                <img
-                  src={ImgLogo}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex justify-center items-center">
-                <img
-                  src={ImgLogo}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex justify-center items-center">
-                <img
-                  src={ImgLogo}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/register"
-                className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
-              >
-                <button>
-                  <RiAddCircleFill size={130} color="black" />
-                </button>
-              </Link>
-              <div className="flex justify-center items-center"></div>
-              <div className="flex justify-center items-center"></div>
-              <div className="flex justify-center items-center"></div>
-              <div className="flex justify-center items-center"></div>
-            </>
-          )}
-        </section>
-
+      <main className="flex flex-col items-center h-4/5">
         <div className="font-bold text-xl my-2 flex justify-between w-full">
-          <button
-            onClick={() => {
-              diminuirData();
-            }}
-          >
+          <button onClick={diminuirDia}>
             <ImArrowLeft2 size={35} color="black" />
-          </button>{" "}
-          <button
-            onClick={() => {
-              aumentarData();
-            }}
-          >
+          </button>
+          <h2 className="font-bold text-xl my-2">
+            {dataAtual.toLocaleDateString()}
+          </h2>
+          <button onClick={adicionarDia}>
             <ImArrowRight2 size={35} color="black" />
           </button>
         </div>
+
+        <section className="w-full h-5/6">
+          {postFiltrado.length > 0 ? (
+            <>
+              {postFiltrado.map((post) => (
+                <div className="w-full h-fit flex flex-col  items-center gap-4">
+                  <div
+                    className="w-full h-4/6 bg-bgMain grid divide-x-2 divide-gray-500 relative"
+                    style={{
+                      gridTemplateColumns: `${
+                        post.imagens.length == 1
+                          ? `repeat(1, 1fr)`
+                          : `repeat(2, 0.5fr)`
+                      }`,
+                    }}
+                  >
+                    {post.imagens.map((imagem) => (
+                      <div className="flex justify-center items-center w-full h-full">
+                        <img
+                          src={imagem.url}
+                          alt=""
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="font-bold">{post.titulo}</div>
+                  <div className="w-full text-center">{post.descricao}</div>
+                </div>
+              ))}
+            </>
+          ) : (
+            <>
+              <div className="w-full h-4/6 bg-bgMain grid grid-cols-2 divide-x-2 divide-gray-500 relative">
+                <Link
+                  to="/register"
+                  className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                >
+                  <button>
+                    <RiAddCircleFill size={130} color="black" />
+                  </button>
+                </Link>
+                <div className="flex justify-center items-center"></div>
+                <div className="flex justify-center items-center"></div>
+                <div className="flex justify-center items-center"></div>
+                <div className="flex justify-center items-center"></div>
+              </div>
+            </>
+          )}
+        </section>
       </main>
     </>
   );
