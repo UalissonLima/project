@@ -1,23 +1,32 @@
-import { ReactNode, createContext } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
+
+interface ConteudoDataProps {
+  dataAtual: string | undefined;
+  recebeData: (data: string) => void; // Adicione o tipo para o parâmetro
+}
 
 interface ProviderProps {
   children: ReactNode;
 }
 
-interface ConteudoDataProps {
-    titulo: string;
-    data: string;
-
-}
-
-const ConteudoContext = createContext({}) as ConteudoDataProps;
+const ConteudoContext = createContext({} as ConteudoDataProps);
 
 function ConteudoProvider({ children }: ProviderProps) {
-  return
-  ( <ConteudoContext.Provider value={}>
+  const [dataAtual, setDataAtual] = useState<string | undefined>(undefined); // Inicialize como undefined
 
-    {children}
-  </ConteudoContext.Provider>)
+  function recebeData(data: string) {
+    setDataAtual(data);
+  }
+
+  return (
+    <ConteudoContext.Provider value={{ dataAtual, recebeData }}>
+      {children}
+    </ConteudoContext.Provider>
+  );
 }
 
-export default ConteudoProvider
+export default ConteudoProvider;
+
+export function useContexto() {
+  return useContext(ConteudoContext);
+}

@@ -16,6 +16,20 @@
   font-family: "Noto Sans Display", sans-serif;
 }
 
+body{
+  background-color: #A3839F;
+}
+
 h1 {
   font-family: "Satisfy", cursive;
+}
+
+@media only screen and (max-width: 320px) {  
+  #containerPadrao{
+    padding: 10px;
+  }
+
+  #header {
+    padding-top: 10px;
+  }
 }

@@ -5,6 +5,7 @@ import { ImArrowRight2 } from "react-icons/im";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../services/ConfigFirebase";
 import { Link } from "react-router-dom";
+import { useContexto } from "../context/ContextRegister";
 
 interface ImagemProps {
   uid: string;
@@ -21,6 +22,8 @@ interface PostProps {
 }
 
 function Home() {
+  const { recebeData } = useContexto();
+
   const [dataAtual, setDataAtual] = useState(new Date());
   const [post, setPost] = useState<PostProps[]>([]);
   const [postFiltrado, setPostFiltrado] = useState<PostProps[]>([]);
@@ -32,6 +35,7 @@ function Home() {
   useEffect(() => {
     getPosts();
     postsFiltrados();
+    recebeData(dataAtual.toISOString().split("T")[0]);
   }, [dataAtual]);
 
   async function getPosts() {
@@ -51,7 +55,6 @@ function Home() {
 
   function getDataAtual() {
     const data = new Date();
-
     setDataAtual(data);
   }
 
@@ -81,7 +84,7 @@ function Home() {
 
   return (
     <>
-      <main className="flex flex-col items-center h-4/5">
+      <main className="flex flex-col items-center h-4/5 max-h-fit">
         <div className="font-bold text-xl my-2 flex justify-between w-full">
           <button onClick={diminuirDia}>
             <ImArrowLeft2 size={35} color="black" />
@@ -98,9 +101,9 @@ function Home() {
           {postFiltrado.length > 0 ? (
             <>
               {postFiltrado.map((post) => (
-                <div className="w-full h-fit flex flex-col  items-center gap-4">
+                <div className="w-full h-5/6 flex flex-col  items-center gap-4">
                   <div
-                    className="w-full h-4/6 bg-bgMain grid divide-x-2 divide-gray-500 relative"
+                    className="w-full h-full bg-bgMain grid divide-x-2 divide-gray-500 relative"
                     style={{
                       gridTemplateColumns: `${
                         post.imagens.length == 1
@@ -126,7 +129,7 @@ function Home() {
             </>
           ) : (
             <>
-              <div className="w-full h-4/6 bg-bgMain grid grid-cols-2 divide-x-2 divide-gray-500 relative">
+              <div className="w-full h-5/6 bg-bgMain grid grid-cols-2 divide-x-2 divide-gray-500 relative">
                 <Link
                   to="/register"
                   className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"

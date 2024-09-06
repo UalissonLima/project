@@ -1,8 +1,13 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
+import ConteudoProvider from "./context/ContextRegister";
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ConteudoProvider>
+      <RouterProvider router={router} />;
+    </ConteudoProvider>
+  );
 }
 
 export default App;

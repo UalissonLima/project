@@ -5,7 +5,7 @@ interface ContainerProps {
 }
 
 function Container({ children }: ContainerProps) {
-  return <div className="p-10 bg-bgContainer h-screen w-screen">{children}</div>;
+  return <div className="p-10 h-screen w-screen sm:px-36 py-10" id="containerPadrao">{children}</div>;
 }
 
 export default Container;
