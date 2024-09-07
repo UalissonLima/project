@@ -2,7 +2,7 @@ import { ReactNode, createContext, useContext, useState } from "react";
 
 interface ConteudoDataProps {
   dataAtual: string | undefined;
-  recebeData: (data: string) => void; // Adicione o tipo para o parâmetro
+  recebeData: (data: string) => void;
 }
 
 interface ProviderProps {
@@ -12,7 +12,7 @@ interface ProviderProps {
 const ConteudoContext = createContext({} as ConteudoDataProps);
 
 function ConteudoProvider({ children }: ProviderProps) {
-  const [dataAtual, setDataAtual] = useState<string | undefined>(undefined); // Inicialize como undefined
+  const [dataAtual, setDataAtual] = useState<string | undefined>(undefined);
 
   function recebeData(data: string) {
     setDataAtual(data);

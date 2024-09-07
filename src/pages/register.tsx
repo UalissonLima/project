@@ -28,6 +28,8 @@ function Register() {
   const [imgConfere, setImgConfere] = useState<string[]>([]);
   const [dataConfere, setDataConfere] = useState<boolean>();
 
+  console.log(data);
+
   async function handleFile(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) {
       const imagem = e.target.files[0];
@@ -66,9 +68,9 @@ function Register() {
 
     try {
       await addDoc(collection(db, "posts"), {
-        titulo,
-        data,
-        descricao,
+        titulo: titulo,
+        data: data,
+        descricao: descricao,
         imagens: imagemLista,
       });
       setTitulo("");
@@ -137,7 +139,7 @@ function Register() {
 
         <input
           type="date"
-          className="w-3/6 h-10 px-4 flex justify-center rounded-lg text-center sm:w-2/5 sm:h-16 sm:text-xl"
+          className="w-3/6 h-10 px-4 flex justify-center rounded-lg text-center font-bold sm:w-2/5 sm:h-16 sm:text-xl"
           value={data}
           onChange={(e) => setData(e.target.value)}
           disabled={dataConfere}
@@ -151,7 +153,7 @@ function Register() {
             onChange={handleFile}
             required
           />
-          <RiImageAddFill size={80} color="black"/>
+          <RiImageAddFill size={80} color="black" />
 
           <div className="w-full h-full flex justify-center items-center gap-2 py-1">
             {imagemItem.map((imagem) => (
