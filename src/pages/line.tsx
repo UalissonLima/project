@@ -33,6 +33,14 @@ export default function Line() {
         descricao: doc.data().descricao,
       });
     });
+
+    // Ordenar os posts pela data em ordem crescente
+    listaPost.sort(
+      (a, b) =>
+        new Date(a.data.split("/").reverse().join("-")).getTime() -
+        new Date(b.data.split("/").reverse().join("-")).getTime()
+    );
+
     setPost(listaPost);
   }
 
