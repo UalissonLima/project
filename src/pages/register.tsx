@@ -11,6 +11,7 @@ import {
 import { db, storage } from "../services/ConfigFirebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useContexto } from "../context/ContextRegister";
+import { useNavigate } from "react-router-dom";
 
 interface ImagemProps {
   uid: string;
@@ -20,15 +21,13 @@ interface ImagemProps {
 
 function Register() {
   const { dataAtual } = useContexto();
-
+  const navigate = useNavigate();
   const [imagemItem, setImagemItem] = useState<ImagemProps[]>([]);
   const [titulo, setTitulo] = useState("");
   const [data, setData] = useState(dataAtual);
   const [descricao, setDescricao] = useState("");
   const [imgConfere, setImgConfere] = useState<string[]>([]);
   const [dataConfere, setDataConfere] = useState<boolean>();
-
-  console.log(data);
 
   async function handleFile(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) {
@@ -78,6 +77,7 @@ function Register() {
       setDescricao("");
       setImagemItem([]);
       setImgConfere([]);
+      navigate("/line", { replace: true });
     } catch (error) {
       console.error("Erro ao adicionar documento: ", error);
     }
@@ -125,13 +125,13 @@ function Register() {
   return (
     <>
       <form
-        className="w-full flex flex-col gap-5 items-center sm:gap-10"
+        className="w-full flex flex-col gap-5 items-center sm:gap-10 lg:w-4/6 lg:m-auto lg:gap-2"
         onSubmit={handleSubmit}
       >
         <input
           type="text"
           placeholder="Digite o título aqui..."
-          className="w-full h-10 px-4 rounded-lg sm:h-16 sm:text-xl"
+          className="w-full h-10 px-4 rounded-lg sm:h-16 sm:text-xl lg:h-10 "
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
           required
@@ -139,13 +139,13 @@ function Register() {
 
         <input
           type="date"
-          className="w-3/6 h-10 px-4 flex justify-center rounded-lg text-center font-bold sm:w-2/5 sm:h-16 sm:text-xl"
+          className="w-3/6 h-10 px-4 flex justify-center rounded-lg text-center font-bold sm:w-2/5 sm:h-16 sm:text-xl lg:h-10"
           value={data}
           onChange={(e) => setData(e.target.value)}
           disabled={dataConfere}
         />
 
-        <div className="w-full h-20 bg-white flex relative px-4 items-center gap-1 rounded-lg sm:h-40">
+        <div className="w-full h-20 bg-white flex relative px-4 items-center gap-1 rounded-lg sm:h-40 lg:h-20">
           <input
             type="file"
             accept="image/*"
@@ -179,13 +179,13 @@ function Register() {
 
         <textarea
           placeholder="Descreva seu dia aqui..."
-          className="px-4 py-2 w-full min-h-40 rounded-lg sm:text-xl"
+          className="px-4 py-2 w-full text-center  min-h-40 rounded-lg sm:text-xl"
           value={descricao}
           onChange={(e) => setDescricao(e.target.value)}
         ></textarea>
 
         <button
-          className="bg-fuchsia-700 font-bold text-white w-full p-2 rounded-lg sm:text-2xl sm:h-16"
+          className="bg-[#b24098cc] font-bold text-white w-full p-2 rounded-lg sm:text-2xl sm:h-16 lg:h-12 lg:p-4 lg:flex lg:justify-center lg:items-center"
           type="submit"
         >
           REGISTRAR

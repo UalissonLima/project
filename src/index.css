@@ -18,9 +18,10 @@
 
 body{
   background-color: #A3839F;
+  overflow-x: hidden; /* Para ocultar o conteúdo que transborda */  
 }
 
-h1 {
+#header {
   font-family: "Satisfy", cursive;
 }
 

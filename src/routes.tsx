@@ -3,6 +3,7 @@ import Home from "./pages/home";
 import Layout from "./components/layout";
 import Register from "./pages/register";
 import RouteProteject from "./context/RouteProteject";
+import Line from "./pages/line";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
             <Register />
           </RouteProteject>
         ),
+      },
+      {
+        path: "/line",
+        element: <Line />,
       },
     ],
   },

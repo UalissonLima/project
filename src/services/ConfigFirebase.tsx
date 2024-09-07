@@ -2,22 +2,17 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDax-oAxuN9nRM9R2czW9ytCWWB4FPiJBg",
-  authDomain: "memoryties-659d0.firebaseapp.com",
-  projectId: "memoryties-659d0",
-  storageBucket: "memoryties-659d0.appspot.com",
-  messagingSenderId: "980724175080",
-  appId: "1:980724175080:web:4b7d85da5f577fe1a0395d",
-  measurementId: "G-CJCBQ3FBQH",
+  apiKey: "AIzaSyBmvOZQs52YsUEwntK_xbomRoyTrSxrv4w",
+  authDomain: "memoryties-3b498.firebaseapp.com",
+  projectId: "memoryties-3b498",
+  storageBucket: "memoryties-3b498.appspot.com",
+  messagingSenderId: "94415348465",
+  appId: "1:94415348465:web:9311e3fabce3d8e3cf7f50",
+  measurementId: "G-XV6FWJG8NB",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const db = getFirestore(app);
