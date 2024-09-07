@@ -136,7 +136,7 @@ function Home() {
                         alt=""
                         className={`w-full object-cover lg:object-cover rounded-lg shadow-lg ${
                           post.imagens.length === 1
-                            ? "h-full lg:h-[290px]" // Ocupa todo o espaço
+                            ? "h-[300px] lg:h-[290px]" // Ocupa todo o espaço
                             : post.imagens.length === 2
                             ? "h-[300px] sm:h-[500px] lg:h-[290px]" // Altura para 2 imagens
                             : post.imagens.length === 3

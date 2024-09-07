@@ -12,6 +12,7 @@ import { db, storage } from "../services/ConfigFirebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useContexto } from "../context/ContextRegister";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 interface ImagemProps {
   uid: string;
@@ -34,7 +35,7 @@ function Register() {
       const imagem = e.target.files[0];
 
       if (imgConfere.length === 4) {
-        alert("JA TEM 4");
+        toastFailed("O máximo de imagens que podem ser adicionadas são 4!");
         return;
       } else {
         if (imagem.type === "image/jpeg" || imagem.type === "image/png") {
@@ -47,7 +48,9 @@ function Register() {
             return updatedImgConfere;
           });
         } else {
-          alert("Formato de imagem não suportado. Aceite apenas JPEG e PNG.");
+          toastFailed(
+            "Formato de imagem não suportado, enviar apenas JPEG e PNG."
+          );
         }
       }
     }
@@ -56,7 +59,7 @@ function Register() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (imagemItem.length === 0) {
-      alert("Envie alguma imagem!");
+      toastFailed("Envie alguma imagem!");
       return;
     }
 
@@ -77,6 +80,7 @@ function Register() {
       setDescricao("");
       setImagemItem([]);
       setImgConfere([]);
+      toastSucess("Registrado com sucesso!");
       navigate("/line", { replace: true });
     } catch (error) {
       console.error("Erro ao adicionar documento: ", error);
@@ -106,7 +110,7 @@ function Register() {
 
     try {
       await deleteObject(deleteRef);
-      alert("Imagem deletada com sucesso!");
+      toastSucess("Imagem deletada com sucesso!");
 
       setImagemItem((prevImages) =>
         prevImages.filter((image) => image.uid !== imagemUid)
@@ -118,8 +122,24 @@ function Register() {
         return updatedImgConfere;
       });
     } catch (error) {
-      alert("Erro ao deletar imagem: " + error);
+      toastFailed("Erro ao deletar imagem: " + error);
     }
+  }
+
+  function toastFailed(messagem: string) {
+    toast.error(messagem, {
+      position: "top-center",
+      autoClose: 5000,
+      closeOnClick: true,
+    });
+  }
+
+  function toastSucess(messagem: string) {
+    toast.success(messagem, {
+      position: "top-center",
+      autoClose: 2000,
+      closeOnClick: true,
+    });
   }
 
   return (
@@ -191,6 +211,7 @@ function Register() {
           REGISTRAR
         </button>
       </form>
+      <ToastContainer />
     </>
   );
 }
