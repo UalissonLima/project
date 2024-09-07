@@ -80,7 +80,7 @@ export default function Line() {
           {posts.length > 0 && (
             <div className="border-x-4 border-solid border-red-700 h-10 w-0 m-auto"></div>
           )}
-          <h2 className="bg-red-700 text-white p-1 text-lg font-bold text-center w-full rounded-lg ">
+          <h2 className="bg-red-700 text-white p-1 text-lg font-bold text-center w-full rounded-lg overflow-hidden overflow-wrap break-words ">
             {post.titulo}
           </h2>
           <div className="bg-[#FDEBFB] p-1 text-base w-11/12 m-auto text-center overflow-hidden overflow-wrap break-words">
