@@ -13,6 +13,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { useContexto } from "../context/ContextRegister";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface ImagemProps {
   uid: string;

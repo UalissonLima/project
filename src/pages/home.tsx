@@ -136,7 +136,7 @@ function Home() {
                         alt=""
                         className={`w-full object-cover lg:object-cover rounded-lg shadow-lg ${
                           post.imagens.length === 1
-                            ? "h-[300px] lg:h-[290px]" // Ocupa todo o espaço
+                            ? "h-[300px] lg:h-full" // Ocupa todo o espaço
                             : post.imagens.length === 2
                             ? "h-[300px] sm:h-[500px] lg:h-[290px]" // Altura para 2 imagens
                             : post.imagens.length === 3
@@ -151,10 +151,10 @@ function Home() {
                     </div>
                   ))}
                 </div>
-                <div className="font-bold w-full text-center text-lg mt-4 sm:text-3xl">
+                <div className="font-bold w-full text-center text-lg mt-4 sm:text-3xl overflow-hidden overflow-wrap break-words">
                   <p>{post.titulo}</p>
                 </div>
-                <div className="w-full text-wrap text-center mb-4 sm:text-2xl overflow-hidden overflow-wrap">
+                <div className="w-full text-wrap text-center mb-4 sm:text-2xl overflow-hidden overflow-wrap  break-words">
                   <p>{post.descricao}</p>
                 </div>
               </div>
