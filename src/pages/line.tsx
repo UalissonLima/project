@@ -33,9 +33,13 @@ export default function Line() {
         descricao: doc.data().descricao,
       });
     });
-    
+
     // Ordenar os posts pela data em ordem decrescente
-    listaPost.sort((a, b) => new Date(b.data.split('/').reverse().join('-')).getTime() - new Date(a.data.split('/').reverse().join('-')).getTime());
+    listaPost.sort(
+      (a, b) =>
+        new Date(b.data.split("/").reverse().join("-")).getTime() -
+        new Date(a.data.split("/").reverse().join("-")).getTime()
+    );
 
     setPost(listaPost);
   }
@@ -55,7 +59,12 @@ export default function Line() {
   function getNavega(data: string) {
     const [dia, mes, ano] = data.split("/").map(Number);
     const formata = `${ano}-${mes}-${dia}`;
-    const novaData = new Date(formata);
+    const novaData = new Date(formata); // Verifique se `formata` está no formato correto
+
+    if (isNaN(novaData.getTime())) {
+      console.error("Data inválida:", formata);
+      return; // Lidar com a data inválida
+    }
 
     navegaHome(novaData);
     navigate("/", { replace: true });
