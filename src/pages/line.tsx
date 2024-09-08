@@ -59,15 +59,21 @@ export default function Line() {
   function getNavega(data: string) {
     const [dia, mes, ano] = data.split("/").map(Number);
     const formata = `${ano}-${mes}-${dia}`;
-    const novaData = new Date(formata); // Verifique se `formata` está no formato correto
+    const novaData = new Date(formata);
 
     if (isNaN(novaData.getTime())) {
       console.error("Data inválida:", formata);
-      return; // Lidar com a data inválida
+      return;
     }
 
-    navegaHome(novaData);
-    navigate("/", { replace: true });
+    console.log("Navegando para a data:", novaData);
+
+    try {
+      navegaHome(novaData);
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Erro ao navegar:", error);
+    }
   }
 
   return (
