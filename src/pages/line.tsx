@@ -58,8 +58,8 @@ export default function Line() {
 
   function getNavega(data: string) {
     const [dia, mes, ano] = data.split("/").map(Number);
-    const formata = `${ano}-${mes}-${dia}`;
-    const novaData = new Date(formata);
+    const formata = `${ano}-${mes}-${dia}`; // Formato ISO 8601
+    const novaData = new Date(formata + "T00:00:00"); // Adicionando a hora para evitar problemas de fuso horário
 
     if (isNaN(novaData.getTime())) {
       console.error("Data inválida:", formata);
