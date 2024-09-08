@@ -39,7 +39,7 @@ function Register() {
         toastFailed("O máximo de imagens que podem ser adicionadas são 4!");
         return;
       } else {
-        if (imagem.type === "image/jpeg" || imagem.type === "image/png") {
+        if (imagem.type === "image/jpeg" || imagem.type === "image/png" || imagem.type === 'image/heic') {
           await handleUpload(imagem);
 
           // Atualize imgConfere e dataConfere ao mesmo tempo
