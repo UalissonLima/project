@@ -14,6 +14,7 @@ import { useContexto } from "../context/ContextRegister";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import heic2any from "heic2any";
 
 interface ImagemProps {
   uid: string;
@@ -39,8 +40,37 @@ function Register() {
         toastFailed("O máximo de imagens que podem ser adicionadas são 4!");
         return;
       } else {
-        if (imagem.type === "image/jpeg" || imagem.type === "image/png" || imagem.type === 'image/heic') {
-          await handleUpload(imagem);
+        if (
+          imagem.type === "image/jpeg" ||
+          imagem.type === "image/png" ||
+          imagem.type === "image/heic"
+        ) {
+          if (imagem.type === "image/heic") {
+            // Converter HEIC para JPEG
+            const convertedBlob = await heic2any({
+              blob: imagem,
+              toType: "image/jpeg",
+            });
+
+            // Verificar se o retorno é um único Blob
+            const blobToUpload = Array.isArray(convertedBlob)
+              ? convertedBlob[0]
+              : convertedBlob;
+
+            // Criar um novo File a partir do Blob
+            const convertedFile = new File(
+              [blobToUpload],
+              imagem.name.replace(/\.heic$/i, ".jpg"),
+              {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+              }
+            );
+
+            await handleUpload(convertedFile);
+          } else {
+            await handleUpload(imagem);
+          }
 
           // Atualize imgConfere e dataConfere ao mesmo tempo
           setImgConfere((prev) => {
@@ -50,13 +80,12 @@ function Register() {
           });
         } else {
           toastFailed(
-            "Formato de imagem não suportado, enviar apenas JPEG e PNG."
+            "Formato de imagem não suportado, enviar apenas JPEG, PNG, ou HEIC."
           );
         }
       }
     }
   }
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (imagemItem.length === 0) {
