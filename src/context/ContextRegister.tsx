@@ -23,6 +23,7 @@ function ConteudoProvider({ children }: ProviderProps) {
 
   function navegaHome(data: Date) {
     setTrocaData(data);
+    console.log("Data setada no contexto:", data);
   }
 
   return (
@@ -34,9 +35,9 @@ function ConteudoProvider({ children }: ProviderProps) {
   );
 }
 
-export default ConteudoProvider;
-
 // eslint-disable-next-line react-refresh/only-export-components
 export function useContexto() {
   return useContext(ConteudoContext);
 }
+
+export default ConteudoProvider;

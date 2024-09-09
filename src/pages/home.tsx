@@ -62,13 +62,14 @@ function Home() {
 
   function getDataAtual() {
     if (trocaData) {
-      setDataAtual(trocaData);
-      navegaHome(new Date());
+      setDataAtual(new Date(trocaData)); // Esta linha pode estar causando a discrepância
+      navegaHome(new Date(trocaData)); // Não precisa navegar para a data atual novamente
     } else {
       const data = new Date();
       setDataAtual(data);
     }
   }
+  
 
   function adicionarDia() {
     setDataAtual((prevData) => {
@@ -160,8 +161,10 @@ function Home() {
               </div>
             ))
           ) : (
-            <div className="w-full h-[300px] bg-bgMain grid grid-cols-2 divide-x-2 divide-gray-500 rounded-lg mb-20 relative sm:h-[512px]
-             lg:h-[290px] lg:w-3/6">
+            <div
+              className="w-full h-[300px] bg-bgMain grid grid-cols-2 divide-x-2 divide-gray-500 rounded-lg mb-20 relative sm:h-[512px]
+             lg:h-[290px] lg:w-3/6"
+            >
               <Link
                 to="/register"
                 className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center items-center"

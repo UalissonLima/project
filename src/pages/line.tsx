@@ -46,62 +46,56 @@ export default function Line() {
 
   function formataData(data: string) {
     const date = new Date(data);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const dayNumber = Number(day) + 1;
-
-    return `${
-      dayNumber <= 9 ? `0${dayNumber}` : `${dayNumber}`
-    }/${month}/${year}`;
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
   }
 
   function getNavega(data: string) {
     const [dia, mes, ano] = data.split("/").map(Number);
-    const formata = `${ano}-${mes}-${dia}`; // Formato ISO 8601
-    const novaData = new Date(formata + "T00:00:00"); // Adicionando a hora para evitar problemas de fuso horário
+
+    // Use o local time para garantir que não haja problemas de fuso horário
+    const novaData = new Date(ano, mes - 1, dia); // Cria a nova data corretamente
 
     if (isNaN(novaData.getTime())) {
-      console.error("Data inválida:", formata);
+      console.error("Data inválida:", novaData);
       return;
     }
 
     console.log("Navegando para a data:", novaData);
-
-    try {
-      navegaHome(novaData);
-      navigate("/", { replace: true });
-    } catch (error) {
-      console.error("Erro ao navegar:", error);
-    }
+    navegaHome(novaData);
+    navigate("/", { replace: true });
   }
 
   return (
     <div className="w-full flex flex-col lg:w-2/6 lg:m-auto">
       <div
-        className="flex justify-center p-4 items-center bg-white font-bold rounded-md text-xl"
+        className="flex justify-center p-4 items-center bg-white font-bold rounded-md text-xl cursor-pointer"
         onClick={() => {
           navigate("/", { replace: true });
         }}
       >
         Continuar a linha
       </div>
-      {posts.map((post) => (
-        <div key={post.id} onClick={() => getNavega(post.data)}>
-          {posts.length > 0 && (
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <div key={post.id} onClick={() => getNavega(post.data)}>
             <div className="border-x-4 border-solid border-red-700 h-10 w-0 m-auto"></div>
-          )}
-          <h2 className="bg-red-700 text-white p-1 text-lg font-bold text-center w-full rounded-lg overflow-hidden overflow-wrap break-words ">
-            {post.titulo}
-          </h2>
-          <div className="bg-[#FDEBFB] p-1 text-base w-11/12 m-auto text-center overflow-hidden overflow-wrap break-words">
-            <p>{post.descricao}</p>
+            <h2 className="bg-red-700 text-white p-1 text-lg font-bold text-center w-full rounded-lg overflow-hidden overflow-wrap break-words ">
+              {post.titulo}
+            </h2>
+            <div className="bg-[#FDEBFB] p-1 text-base w-11/12 m-auto text-center overflow-hidden overflow-wrap break-words">
+              <p>{post.descricao}</p>
+            </div>
+            <div className="bg-red-700 text-white p-1 text-base font-bold w-full text-center rounded-lg">
+              <p>{post.data}</p>
+            </div>
           </div>
-          <div className="bg-red-700 text-white p-1 text-base font-bold w-full text-center rounded-lg">
-            <p>{post.data}</p>
-          </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <p className="text-center">Nenhum post disponível.</p>
+      )}
       <Footer />
     </div>
   );
